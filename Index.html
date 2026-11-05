@@ -90,7 +90,7 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 flex flex-col lg:flex-row gap-6 w-full items-start pb-24 lg:pb-6">
 
     <!-- SIDEBAR ESQUERDA (Oculta no mobile/tablet por padrão, visível no desktop lg:) -->
-    <aside id="sidebar" class="hidden lg:flex w-full lg:w-64 shrink-0 flex-col gap-6 lg:sticky lg:top-20 self-start transition-all duration-200">
+    <aside id="sidebar" class="hidden lg:flex w-full lg:w-64 shrink-0 flex-col gap-6 lg:sticky lg:top-20 self-start transition-all duration-200 z-10">
       
       <!-- Navegação Principal -->
       <nav class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-3 shadow-sm flex flex-col gap-1 transition-colors duration-200">
@@ -109,7 +109,8 @@
           <span>Calendário</span>
         </button>
 
-        <button id="navSettingsBtn" onclick="switchTab('settings')" class="w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all flex items-center gap-3">
+        <!-- Configurações visível apenas no Desktop (lg:) -->
+        <button id="navSettingsBtn" onclick="switchTab('settings')" class="hidden lg:flex w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all items-center gap-3">
           <i class="fa-solid fa-gear w-5"></i>
           <span>Configurações</span>
         </button>
@@ -118,375 +119,409 @@
 
       <!-- Perfil do Usuário na Sidebar (Desktop) -->
       <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-4 shadow-sm flex items-center gap-3 transition-colors duration-200">
-        <div class="relative">
-          <div class="w-12 h-12 rounded-full bg-green-600 text-white font-bold text-xl flex items-center justify-center border-2 border-green-500 shadow-sm">
-            U
-          </div>
-          <span class="absolute bottom-0 right-0 w-3.5 h-3.5 bg-green-500 border-2 border-white dark:border-gray-900 rounded-full"></span>
+        <div class="w-10 h-10 rounded-full bg-green-600 text-white font-bold flex items-center justify-center text-base shadow-sm shrink-0">
+          U
         </div>
-        <div class="min-w-0 flex-1">
-          <h2 class="text-sm font-semibold text-gray-900 dark:text-white truncate">Usuário</h2>
+        <div class="min-w-0">
+          <p class="text-sm font-bold text-gray-900 dark:text-white truncate">Usuário</p>
           <p class="text-xs text-gray-500 dark:text-gray-400 truncate">Estudante</p>
         </div>
       </div>
 
     </aside>
 
-    <!-- BARRA FIXA DO USUÁRIO NO BOTTOM (Apenas Mobile e Tablet) -->
-    <div class="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-t border-gray-200 dark:border-gray-800 px-4 py-3 shadow-lg flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="relative">
-          <div class="w-10 h-10 rounded-full bg-green-600 text-white font-bold text-lg flex items-center justify-center border-2 border-green-500 shadow-sm">
-            U
+    <!-- ÁREA DE CONTEÚDO -->
+    <main class="flex-1 w-full min-w-0">
+
+      <!-- BOTÃO VOLTAR (Mobile/Tablet ao ver Calendário ou Configurações) -->
+      <div id="mobileBackBtnContainer" class="hidden mb-4 lg:hidden">
+        <button onclick="switchTab('tasks')" class="inline-flex items-center gap-2 px-4 py-2 bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-xl font-medium text-sm transition-all shadow-sm">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span>Voltar para Tarefas</span>
+        </button>
+      </div>
+
+      <!-- ABA: TAREFAS -->
+      <div id="tasksTab" class="space-y-6">
+
+        <!-- RESUMO / COUNTERS -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-5 shadow-sm transition-colors duration-200 flex flex-col items-center sm:items-start">
+            <span class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Total de tarefas</span>
+            <span id="countTotal" class="text-3xl font-extrabold text-gray-900 dark:text-white">3</span>
           </div>
-          <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white dark:border-gray-900 rounded-full"></span>
+          <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-5 shadow-sm transition-colors duration-200 flex flex-col items-center sm:items-start">
+            <span class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Tarefas realizadas</span>
+            <span id="countDone" class="text-3xl font-extrabold text-green-600 dark:text-green-500">1</span>
+          </div>
+          <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-5 shadow-sm transition-colors duration-200 flex flex-col items-center sm:items-start">
+            <span class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Tarefas pendentes</span>
+            <span id="countPending" class="text-3xl font-extrabold text-amber-500 dark:text-amber-400">2</span>
+          </div>
         </div>
-        <div class="min-w-0">
-          <h2 class="text-sm font-semibold text-gray-900 dark:text-white truncate">Usuário</h2>
-          <p class="text-xs text-gray-500 dark:text-gray-400 truncate">Estudante</p>
+
+        <!-- LISTA DE TAREFAS (GRID 2 COLUNAS) -->
+        <div id="taskList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          
+          <!-- Tarefa 1 -->
+          <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-4 shadow-sm flex flex-col justify-between transition-colors duration-200 hover:border-gray-300 dark:hover:border-gray-700">
+            <div>
+              <div class="flex items-start justify-between gap-3 mb-2">
+                <label class="flex items-center gap-3 cursor-pointer min-w-0">
+                  <input type="checkbox" checked class="w-5 h-5 rounded border-gray-300 dark:border-gray-700 text-green-600 focus:ring-green-500 accent-green-600 cursor-pointer">
+                  <h3 class="font-bold text-gray-900 dark:text-white text-base line-through text-gray-400 dark:text-gray-500">Tarefa 1</h3>
+                </label>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700 dark:bg-red-950/60 dark:text-red-400 border border-red-200 dark:border-red-800/40 shrink-0">Alta</span>
+              </div>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mb-1 ml-8">História</p>
+              <p class="text-sm text-gray-600 dark:text-gray-300 mb-4 ml-8">Trabalho sobre a Revolução Industrial para o professor Carlos.</p>
+            </div>
+            <div class="pt-3 border-t border-gray-100 dark:border-gray-800/80 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+              <span class="flex items-center gap-1"><i class="fa-regular fa-clock"></i> 20/10/2026</span>
+              <div class="flex items-center gap-2">
+                <button onclick="openEditModal(1)" class="px-3 py-1.5 rounded-lg bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-900 font-medium transition-colors">Editar</button>
+                <button onclick="deleteTask(1)" class="px-3 py-1.5 rounded-lg bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-900 font-medium transition-colors">Excluir</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tarefa 2 -->
+          <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-4 shadow-sm flex flex-col justify-between transition-colors duration-200 hover:border-gray-300 dark:hover:border-gray-700">
+            <div>
+              <div class="flex items-start justify-between gap-3 mb-2">
+                <label class="flex items-center gap-3 cursor-pointer min-w-0">
+                  <input type="checkbox" class="w-5 h-5 rounded border-gray-300 dark:border-gray-700 text-green-600 focus:ring-green-500 accent-green-600 cursor-pointer">
+                  <h3 class="font-bold text-gray-900 dark:text-white text-base">Tarefa 2</h3>
+                </label>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-700 dark:bg-amber-950/60 dark:text-amber-400 border border-amber-200 dark:border-amber-800/40 shrink-0">Média</span>
+              </div>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mb-1 ml-8">Matemática</p>
+              <p class="text-sm text-gray-600 dark:text-gray-300 mb-4 ml-8">Estudar para a prova de Geometria Analítica.</p>
+            </div>
+            <div class="pt-3 border-t border-gray-100 dark:border-gray-800/80 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+              <span class="flex items-center gap-1"><i class="fa-regular fa-clock"></i> 22/10/2026</span>
+              <div class="flex items-center gap-2">
+                <button onclick="openEditModal(2)" class="px-3 py-1.5 rounded-lg bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-900 font-medium transition-colors">Editar</button>
+                <button onclick="deleteTask(2)" class="px-3 py-1.5 rounded-lg bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-900 font-medium transition-colors">Excluir</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tarefa 3 -->
+          <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-4 shadow-sm flex flex-col justify-between transition-colors duration-200 hover:border-gray-300 dark:hover:border-gray-700">
+            <div>
+              <div class="flex items-start justify-between gap-3 mb-2">
+                <label class="flex items-center gap-3 cursor-pointer min-w-0">
+                  <input type="checkbox" class="w-5 h-5 rounded border-gray-300 dark:border-gray-700 text-green-600 focus:ring-green-500 accent-green-600 cursor-pointer">
+                  <h3 class="font-bold text-gray-900 dark:text-white text-base">Tarefa 3</h3>
+                </label>
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-950/60 dark:text-blue-400 border border-blue-200 dark:border-blue-800/40 shrink-0">Baixa</span>
+              </div>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mb-1 ml-8">Programação</p>
+              <p class="text-sm text-gray-600 dark:text-gray-300 mb-4 ml-8">Entregar projeto final do EsToDoList no GitHub.</p>
+            </div>
+            <div class="pt-3 border-t border-gray-100 dark:border-gray-800/80 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+              <span class="flex items-center gap-1"><i class="fa-regular fa-clock"></i> 25/10/2026</span>
+              <div class="flex items-center gap-2">
+                <button onclick="openEditModal(3)" class="px-3 py-1.5 rounded-lg bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-900 font-medium transition-colors">Editar</button>
+                <button onclick="deleteTask(3)" class="px-3 py-1.5 rounded-lg bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-900 font-medium transition-colors">Excluir</button>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
 
-      <!-- Ações rápidas no perfil mobile -->
-      <button onclick="switchTab('settings')" class="p-2 rounded-xl text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 text-sm flex items-center gap-1.5 font-medium">
-        <i class="fa-solid fa-gear"></i>
-        <span class="text-xs">Conta</span>
-      </button>
-    </div>
-
-    <!-- ÁREA DE CONTEÚDO PRINCIPAL -->
-    <main class="flex-1 min-w-0 w-full">
-
-      <!-- ABA: TAREFAS (PÁGINA INICIAL) -->
-      <section id="tasksTab" class="space-y-6">
-        
-        <!-- CARDS DE ESTATÍSTICAS -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-4 text-center shadow-sm transition-colors duration-200">
-            <span class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Total de tarefa</span>
-            <span id="totalTasksCount" class="text-3xl font-bold text-gray-900 dark:text-white">3</span>
-          </div>
-
-          <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-4 text-center shadow-sm transition-colors duration-200">
-            <span class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Tarefas realizadas</span>
-            <span id="completedTasksCount" class="text-3xl font-bold text-green-600 dark:text-green-400">1</span>
-          </div>
-
-          <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-4 text-center shadow-sm transition-colors duration-200">
-            <span class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Tarefas pendentes</span>
-            <span id="pendingTasksCount" class="text-3xl font-bold text-amber-500">2</span>
-          </div>
-        </div>
-
-        <!-- GRID DE TAREFAS -->
-        <div id="tasksGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- As tarefas serão renderizadas via JavaScript -->
-        </div>
-
-      </section>
-
       <!-- ABA: CALENDÁRIO -->
-      <section id="calendarTab" class="hidden space-y-6">
-        <!-- Botão Voltar (Visível apenas em Mobile e Tablet) -->
-        <div class="lg:hidden">
-          <button onclick="switchTab('tasks')" class="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-semibold rounded-lg bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors">
-            <i class="fa-solid fa-arrow-left"></i>
-            <span>Voltar para Tarefas</span>
-          </button>
+      <div id="calendarTab" class="hidden bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm transition-colors duration-200">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+            <i class="fa-regular fa-calendar text-green-600"></i>
+            <span>Calendário</span>
+          </h2>
+          <div class="flex items-center gap-3">
+            <button class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400">
+              <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            <span class="font-bold text-gray-800 dark:text-gray-200">Outubro 2026</span>
+            <button class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400">
+              <i class="fa-solid fa-chevron-right"></i>
+            </button>
+          </div>
         </div>
 
-        <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm">
-          <div class="flex items-center justify-between mb-6">
-            <h2 class="text-xl font-bold text-gray-900 dark:text-white">Outubro 2026</h2>
-            <div class="flex gap-2">
-              <button class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700">
-                <i class="fa-solid fa-chevron-left"></i>
-              </button>
-              <button class="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700">
-                <i class="fa-solid fa-chevron-right"></i>
-              </button>
-            </div>
-          </div>
-          <div class="grid grid-cols-7 gap-2 text-center text-xs font-semibold text-gray-400 mb-2">
-            <div>Dom</div><div>Seg</div><div>Ter</div><div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
-          </div>
-          <div class="grid grid-cols-7 gap-2 text-center text-sm">
-            <!-- Exemplo simplificado de visualização do mês -->
-            <div class="p-3 text-gray-400 dark:text-gray-600">27</div>
-            <div class="p-3 text-gray-400 dark:text-gray-600">28</div>
-            <div class="p-3 text-gray-400 dark:text-gray-600">29</div>
-            <div class="p-3 text-gray-400 dark:text-gray-600">30</div>
-            <div class="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">1</div>
-            <div class="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">2</div>
-            <div class="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">3</div>
-            <div class="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">4</div>
-            <div class="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">5</div>
-            <div class="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">6</div>
-            <div class="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">7</div>
-            <div class="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">8</div>
-            <div class="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">9</div>
-            <div class="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">10</div>
-            <div class="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">11</div>
-            <div class="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">12</div>
-            <div class="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">13</div>
-            <div class="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">14</div>
-            <div class="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">15</div>
-            <div class="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">16</div>
-            <div class="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">17</div>
-            <div class="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">18</div>
-            <div class="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">19</div>
-            <div class="p-3 rounded-xl bg-green-50 dark:bg-green-950/60 border border-green-500 font-bold text-green-600 dark:text-green-400 rounded-xl">20</div>
-            <div class="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">21</div>
-            <div class="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/60 border border-amber-500 font-bold text-amber-600 dark:text-amber-400 rounded-xl">22</div>
-            <div class="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">23</div>
-            <div class="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">24</div>
-            <div class="p-3 rounded-xl bg-blue-50 dark:bg-blue-950/60 border border-blue-500 font-bold text-blue-600 dark:text-blue-400 rounded-xl">25</div>
-            <div class="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">26</div>
-            <div class="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">27</div>
-            <div class="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">28</div>
-            <div class="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">29</div>
-            <div class="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">30</div>
-            <div class="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">31</div>
-          </div>
+        <div class="grid grid-cols-7 gap-2 text-center text-xs font-semibold text-gray-400 uppercase mb-2">
+          <div>Dom</div><div>Seg</div><div>Ter</div><div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
         </div>
-      </section>
+
+        <div class="grid grid-cols-7 gap-2 text-sm text-center">
+          <div class="p-3 text-gray-300 dark:text-gray-700">27</div>
+          <div class="p-3 text-gray-300 dark:text-gray-700">28</div>
+          <div class="p-3 text-gray-300 dark:text-gray-700">29</div>
+          <div class="p-3 text-gray-300 dark:text-gray-700">30</div>
+          <div class="p-3 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">1</div>
+          <div class="p-3 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">2</div>
+          <div class="p-3 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">3</div>
+          <div class="p-3 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">4</div>
+          <div class="p-3 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">5</div>
+          <div class="p-3 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">6</div>
+          <div class="p-3 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">7</div>
+          <div class="p-3 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">8</div>
+          <div class="p-3 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">9</div>
+          <div class="p-3 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">10</div>
+          <div class="p-3 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">11</div>
+          <div class="p-3 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">12</div>
+          <div class="p-3 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">13</div>
+          <div class="p-3 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">14</div>
+          <div class="p-3 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">15</div>
+          <div class="p-3 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">16</div>
+          <div class="p-3 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">17</div>
+          <div class="p-3 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">18</div>
+          <div class="p-3 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">19</div>
+          <div class="p-3 font-bold rounded-xl bg-green-600 text-white relative shadow-sm">
+            20
+            <span class="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full"></span>
+          </div>
+          <div class="p-3 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">21</div>
+          <div class="p-3 font-bold rounded-xl bg-amber-500 text-white relative shadow-sm">
+            22
+            <span class="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full"></span>
+          </div>
+          <div class="p-3 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">23</div>
+          <div class="p-3 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">24</div>
+          <div class="p-3 font-bold rounded-xl bg-blue-500 text-white relative shadow-sm">
+            25
+            <span class="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full"></span>
+          </div>
+          <div class="p-3 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">26</div>
+          <div class="p-3 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">27</div>
+          <div class="p-3 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">28</div>
+          <div class="p-3 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">29</div>
+          <div class="p-3 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">30</div>
+          <div class="p-3 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">31</div>
+        </div>
+      </div>
 
       <!-- ABA: CONFIGURAÇÕES -->
-      <section id="settingsTab" class="hidden space-y-6">
-        <!-- Botão Voltar (Visível apenas em Mobile e Tablet) -->
-        <div class="lg:hidden">
-          <button onclick="switchTab('tasks')" class="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-semibold rounded-lg bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors">
-            <i class="fa-solid fa-arrow-left"></i>
-            <span>Voltar para Tarefas</span>
-          </button>
-        </div>
-
-        <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm space-y-6">
-          <h2 class="text-xl font-bold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800 pb-4">Configurações da Conta</h2>
-          
-          <div class="space-y-4">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nome de Exibição</label>
-              <input type="text" value="Usuário" class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-green-500">
-            </div>
-
-            <div>
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notificações</label>
-              <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-xl">
-                <span class="text-sm text-gray-700 dark:text-gray-300">Lembrete de entregas pendentes</span>
-                <input type="checkbox" checked class="w-4 h-4 accent-green-600">
-              </div>
-            </div>
-
-            <!-- Botão Sair da Conta (Sem funcionamento) -->
-            <div class="pt-4 border-t border-gray-200 dark:border-gray-800">
-              <button type="button" class="w-full sm:w-auto px-5 py-2.5 rounded-xl text-sm font-semibold text-red-600 dark:text-red-400 bg-red-50 hover:bg-red-100 dark:bg-red-950/40 dark:hover:bg-red-900/60 border border-red-200 dark:border-red-900/50 transition-colors flex items-center justify-center gap-2">
-                <i class="fa-solid fa-right-from-bracket"></i>
-                <span>Sair da conta</span>
-              </button>
-            </div>
+      <div id="settingsTab" class="hidden bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm transition-colors duration-200">
+        <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+          <i class="fa-solid fa-gear text-green-600"></i>
+          <span>Configurações</span>
+        </h2>
+        <div class="space-y-6 max-w-xl">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Nome de Exibição</label>
+            <input type="text" value="Usuário" class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-green-600">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Notificações por e-mail</label>
+            <label class="flex items-center gap-3 cursor-pointer">
+              <input type="checkbox" checked class="w-5 h-5 rounded border-gray-300 dark:border-gray-700 text-green-600 focus:ring-green-500 accent-green-600">
+              <span class="text-sm text-gray-600 dark:text-gray-400">Receber lembretes de tarefas pendentes</span>
+            </label>
+          </div>
+          <div class="pt-4 border-t border-gray-200 dark:border-gray-800 flex items-center justify-between">
+            <button class="bg-green-600 hover:bg-green-500 text-white px-5 py-2.5 rounded-xl font-medium text-sm transition-all shadow-sm">
+              Salvar Alterações
+            </button>
+            <button type="button" class="bg-red-50 hover:bg-red-100 text-red-600 dark:bg-red-950 dark:hover:bg-red-900 dark:text-red-400 border border-red-200 dark:border-red-900 px-4 py-2.5 rounded-xl font-medium text-sm flex items-center gap-2 transition-all">
+              <i class="fa-solid fa-right-from-bracket"></i>
+              <span>Sair da conta</span>
+            </button>
           </div>
         </div>
-      </section>
+      </div>
 
     </main>
   </div>
 
-  <!-- MODAL DE NOVA TAREFA -->
-  <div id="newTaskModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 max-w-lg w-full shadow-xl space-y-4">
-      <div class="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-3">
-        <h3 class="text-lg font-bold text-gray-900 dark:text-white">Nova tarefa</h3>
-        <button onclick="closeModal('newTask')" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
-          <i class="fa-solid fa-xmark text-lg"></i>
+  <!-- FIXO INFERIOR: PERFIL DO USUÁRIO EM CELULAR/TABLET (lg:hidden) -->
+  <div class="fixed bottom-0 left-0 right-0 lg:hidden bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-t border-gray-200 dark:border-gray-800 p-3 z-30 shadow-lg">
+    <div class="max-w-7xl mx-auto flex items-center justify-between px-2">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-green-600 text-white font-bold flex items-center justify-center text-base shadow-sm shrink-0">
+          U
+        </div>
+        <div class="min-w-0">
+          <p class="text-sm font-bold text-gray-900 dark:text-white truncate">Usuário</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400 truncate">Estudante</p>
+        </div>
+      </div>
+      <button onclick="switchTab('settings')" class="px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-xs font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-1.5 transition-colors">
+        <i class="fa-solid fa-gear"></i>
+        <span>Conta</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: NOVA TAREFA -->
+  <div id="newTaskModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-3xl max-w-lg w-full p-6 shadow-2xl transition-colors duration-200 max-h-[90vh] overflow-y-auto">
+      
+      <div class="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-4 mb-5">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Nova tarefa</h2>
+        <button onclick="closeModal('newTask')" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+          <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
 
-      <form id="newTaskForm" onsubmit="handleAddTask(event)" class="space-y-4">
+      <form onsubmit="handleAddTask(event)" class="space-y-4">
         <div>
-          <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Nome da tarefa:</label>
-          <input type="text" id="taskTitle" required placeholder="Ex: Trabalho de História" class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-green-500">
+          <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Nome da tarefa:</label>
+          <input type="text" id="taskTitleInput" required placeholder="Ex: Estudar Matemática" class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-green-600 transition-colors">
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Descrição:</label>
-          <textarea id="taskDescription" rows="3" placeholder="Detalhes da tarefa..." class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-green-500"></textarea>
+          <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Descrição:</label>
+          <textarea id="taskDescInput" rows="3" placeholder="Detalhes da tarefa..." class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-green-600 transition-colors resize-none"></textarea>
         </div>
 
-        <!-- Linha: Categoria e Data -->
-        <div class="grid grid-cols-2 gap-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Categoria:</label>
-            <input type="text" id="taskCategory" placeholder="Ex: História, Exame..." class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-green-500">
+            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Categoria:</label>
+            <input type="text" id="taskCategoryInput" placeholder="Ex: Matemática" class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-green-600 transition-colors">
           </div>
-
           <div>
-            <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Data:</label>
-            <input type="date" id="taskDate" required class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-green-500">
+            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Data:</label>
+            <input type="date" id="taskDateInput" required class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-green-600 transition-colors">
           </div>
         </div>
 
-        <!-- Linha: Status e Prioridade (Estilo Protótipo) -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 items-end">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start pt-2">
           <div>
-            <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Status:</label>
-            <select id="taskStatus" class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-green-500">
+            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Status:</label>
+            <select id="taskStatusInput" class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-green-600 transition-colors">
               <option value="Pendente">Pendente</option>
               <option value="Em Andamento">Em Andamento</option>
               <option value="Concluída">Concluída</option>
             </select>
           </div>
 
-          <div class="border border-gray-300 dark:border-gray-700 rounded-2xl p-2.5 text-center bg-gray-50/50 dark:bg-gray-800/40">
-            <span class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2">Prioridade:</span>
-            <div class="flex items-center justify-around text-xs">
-              <label class="flex flex-col items-center cursor-pointer gap-1">
-                <input type="radio" name="newPriority" value="Alta" class="accent-green-600 w-4 h-4">
-                <span class="text-gray-700 dark:text-gray-300 font-medium">Alta</span>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Prioridade:</label>
+            <div class="border border-gray-200 dark:border-gray-700 rounded-2xl p-3 bg-gray-50/50 dark:bg-gray-800/50 flex items-center justify-around">
+              <label class="flex flex-col items-center gap-1 cursor-pointer">
+                <input type="radio" name="taskPriority" value="Alta" class="accent-green-600 cursor-pointer">
+                <span class="text-xs font-semibold text-gray-700 dark:text-gray-300">Alta</span>
               </label>
-              <label class="flex flex-col items-center cursor-pointer gap-1">
-                <input type="radio" name="newPriority" value="Média" checked class="accent-green-600 w-4 h-4">
-                <span class="text-gray-700 dark:text-gray-300 font-medium">Média</span>
+              <label class="flex flex-col items-center gap-1 cursor-pointer">
+                <input type="radio" name="taskPriority" value="Média" checked class="accent-green-600 cursor-pointer">
+                <span class="text-xs font-semibold text-gray-700 dark:text-gray-300">Média</span>
               </label>
-              <label class="flex flex-col items-center cursor-pointer gap-1">
-                <input type="radio" name="newPriority" value="Baixa" class="accent-green-600 w-4 h-4">
-                <span class="text-gray-700 dark:text-gray-300 font-medium">Baixa</span>
+              <label class="flex flex-col items-center gap-1 cursor-pointer">
+                <input type="radio" name="taskPriority" value="Baixa" class="accent-green-600 cursor-pointer">
+                <span class="text-xs font-semibold text-gray-700 dark:text-gray-300">Baixa</span>
               </label>
             </div>
           </div>
         </div>
 
-        <div class="flex justify-end gap-2 pt-2">
-          <button type="button" onclick="closeModal('newTask')" class="px-4 py-2 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800">
-            Cancelar
-          </button>
-          <button type="submit" class="px-4 py-2 rounded-xl text-sm font-medium bg-green-600 hover:bg-green-500 text-white shadow-sm">
-            Salvar
-          </button>
+        <div class="pt-4 flex items-center justify-end gap-3">
+          <button type="button" onclick="closeModal('newTask')" class="px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 font-medium text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">Cancelar</button>
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-green-600 hover:bg-green-500 text-white font-medium text-sm shadow-sm transition-all">Criar Tarefa</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- MODAL DE EDITAR TAREFA -->
-  <div id="editTaskModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 max-w-lg w-full shadow-xl space-y-4">
-      <div class="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-3">
-        <h3 class="text-lg font-bold text-gray-900 dark:text-white">Editar tarefa</h3>
-        <button onclick="closeModal('editTask')" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
-          <i class="fa-solid fa-xmark text-lg"></i>
+  <!-- MODAL: EDITAR TAREFA -->
+  <div id="editTaskModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-3xl max-w-lg w-full p-6 shadow-2xl transition-colors duration-200 max-h-[90vh] overflow-y-auto">
+      
+      <div class="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-4 mb-5">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white tracking-tight">Editar tarefa</h2>
+        <button onclick="closeModal('editTask')" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+          <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
 
-      <form id="editTaskForm" onsubmit="handleEditTask(event)" class="space-y-4">
-        <input type="hidden" id="editTaskId">
+      <form onsubmit="handleSaveEdit(event)" class="space-y-4">
         <div>
-          <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Nome da tarefa:</label>
-          <input type="text" id="editTaskTitle" required class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-green-500">
+          <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Nome da tarefa:</label>
+          <input type="text" id="editTaskTitleInput" required class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-green-600 transition-colors">
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Descrição:</label>
-          <textarea id="editTaskDescription" rows="3" class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-green-500"></textarea>
+          <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Descrição:</label>
+          <textarea id="editTaskDescInput" rows="3" class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-green-600 transition-colors resize-none"></textarea>
         </div>
 
-        <!-- Linha: Categoria e Data -->
-        <div class="grid grid-cols-2 gap-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Categoria:</label>
-            <input type="text" id="editTaskCategory" placeholder="Ex: História, Exame..." class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-green-500">
+            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Categoria:</label>
+            <input type="text" id="editTaskCategoryInput" class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-green-600 transition-colors">
           </div>
-
           <div>
-            <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Data:</label>
-            <input type="date" id="editTaskDate" required class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-green-500">
+            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Data:</label>
+            <input type="date" id="editTaskDateInput" required class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-green-600 transition-colors">
           </div>
         </div>
 
-        <!-- Linha: Status e Prioridade (Estilo Protótipo) -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 items-end">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-start pt-2">
           <div>
-            <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1">Status:</label>
-            <select id="editTaskStatus" class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-green-500">
+            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Status:</label>
+            <select id="editTaskStatusInput" class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-green-600 transition-colors">
               <option value="Pendente">Pendente</option>
               <option value="Em Andamento">Em Andamento</option>
               <option value="Concluída">Concluída</option>
             </select>
           </div>
 
-          <div class="border border-gray-300 dark:border-gray-700 rounded-2xl p-2.5 text-center bg-gray-50/50 dark:bg-gray-800/40">
-            <span class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2">Prioridade:</span>
-            <div class="flex items-center justify-around text-xs">
-              <label class="flex flex-col items-center cursor-pointer gap-1">
-                <input type="radio" name="editPriority" value="Alta" class="accent-green-600 w-4 h-4">
-                <span class="text-gray-700 dark:text-gray-300 font-medium">Alta</span>
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Prioridade:</label>
+            <div class="border border-gray-200 dark:border-gray-700 rounded-2xl p-3 bg-gray-50/50 dark:bg-gray-800/50 flex items-center justify-around">
+              <label class="flex flex-col items-center gap-1 cursor-pointer">
+                <input type="radio" name="editTaskPriority" value="Alta" class="accent-green-600 cursor-pointer">
+                <span class="text-xs font-semibold text-gray-700 dark:text-gray-300">Alta</span>
               </label>
-              <label class="flex flex-col items-center cursor-pointer gap-1">
-                <input type="radio" name="editPriority" value="Média" class="accent-green-600 w-4 h-4">
-                <span class="text-gray-700 dark:text-gray-300 font-medium">Média</span>
+              <label class="flex flex-col items-center gap-1 cursor-pointer">
+                <input type="radio" name="editTaskPriority" value="Média" class="accent-green-600 cursor-pointer">
+                <span class="text-xs font-semibold text-gray-700 dark:text-gray-300">Média</span>
               </label>
-              <label class="flex flex-col items-center cursor-pointer gap-1">
-                <input type="radio" name="editPriority" value="Baixa" class="accent-green-600 w-4 h-4">
-                <span class="text-gray-700 dark:text-gray-300 font-medium">Baixa</span>
+              <label class="flex flex-col items-center gap-1 cursor-pointer">
+                <input type="radio" name="editTaskPriority" value="Baixa" class="accent-green-600 cursor-pointer">
+                <span class="text-xs font-semibold text-gray-700 dark:text-gray-300">Baixa</span>
               </label>
             </div>
           </div>
         </div>
 
-        <div class="flex justify-end gap-2 pt-2">
-          <button type="button" onclick="closeModal('editTask')" class="px-4 py-2 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800">
-            Cancelar
-          </button>
-          <button type="submit" class="px-4 py-2 rounded-xl text-sm font-medium bg-green-600 hover:bg-green-500 text-white shadow-sm">
-            Salvar Alterações
-          </button>
+        <div class="pt-4 flex items-center justify-end gap-3">
+          <button type="button" onclick="closeModal('editTask')" class="px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 font-medium text-sm text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">Cancelar</button>
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-green-600 hover:bg-green-500 text-white font-medium text-sm shadow-sm transition-all">Salvar Alterações</button>
         </div>
       </form>
     </div>
   </div>
 
+  <!-- MODAL DE EXCLUSÃO (PROTÓTIPO) -->
+  <div id="deleteModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl transition-colors duration-200">
+      <div class="w-12 h-12 rounded-full bg-green-100 text-green-600 dark:bg-green-950 dark:text-green-400 flex items-center justify-center mx-auto mb-4 text-xl">
+        <i class="fa-solid fa-check"></i>
+      </div>
+      <h3 id="deleteModalText" class="text-lg font-bold text-gray-900 dark:text-white mb-6">Tarefa excluída com sucesso</h3>
+      <button onclick="closeModal('delete')" class="w-full bg-green-600 hover:bg-green-500 text-white py-2.5 rounded-xl font-medium text-sm transition-all shadow-sm">
+        Voltar
+      </button>
+    </div>
+  </div>
+
+  <!-- SCRIPTS GLOBAIS DA APLICAÇÃO -->
   <script>
-    // Estado inicial das tarefas com Categoria e Status
-    let tasks = [
-      { id: 1, title: 'Tarefa 1', description: 'Trabalho escolar de História referente ao 3º Bimestre.', category: 'História', date: '2026-10-20', status: 'Concluída', priority: 'Média', completed: true },
-      { id: 2, title: 'Tarefa 2', description: 'Estudar para a prova bimestral de Matemática.', category: 'Matemática', date: '2026-10-22', status: 'Pendente', priority: 'Alta', completed: false },
-      { id: 3, title: 'Tarefa 3', description: 'Projeto prático de desenvolvimento web para o GitHub.', category: 'Projetos', date: '2026-10-25', status: 'Pendente', priority: 'Baixa', completed: false }
-    ];
-
-    // Alternância de modo escuro/claro
+    // Configurações do Tema (Dark/Light)
     function toggleTheme() {
-      const isDark = document.documentElement.classList.toggle('dark');
-      const icon = document.getElementById('themeIcon');
-      if (isDark) {
-        icon.className = 'fa-solid fa-moon text-indigo-300';
+      const html = document.documentElement;
+      if (html.classList.contains('dark')) {
+        html.classList.remove('dark');
+        document.getElementById('themeIcon').className = 'fa-solid fa-sun text-yellow-500';
       } else {
-        icon.className = 'fa-solid fa-sun text-yellow-500';
+        html.classList.add('dark');
+        document.getElementById('themeIcon').className = 'fa-solid fa-moon text-blue-300';
       }
     }
 
-    // Alternar entre abas da barra lateral
-    function switchTab(tab) {
-      document.getElementById('tasksTab').classList.add('hidden');
-      document.getElementById('calendarTab').classList.add('hidden');
-      document.getElementById('settingsTab').classList.add('hidden');
-
-      const activeClass = "bg-green-50 text-green-700 dark:bg-green-950/50 dark:text-green-400 border border-green-200 dark:border-green-800/50";
-      const inactiveClass = "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800";
-
-      document.getElementById('navTasksBtn').className = `w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium flex items-center gap-3 transition-all ${tab === 'tasks' ? activeClass : inactiveClass}`;
-      document.getElementById('navCalendarBtn').className = `w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium flex items-center gap-3 transition-all ${tab === 'calendar' ? activeClass : inactiveClass}`;
-      document.getElementById('navSettingsBtn').className = `w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium flex items-center gap-3 transition-all ${tab === 'settings' ? activeClass : inactiveClass}`;
-
-      document.getElementById(`${tab}Tab`).classList.remove('hidden');
-
-      // Em dispositivos móveis/tablets, fecha o menu ao selecionar uma opção
-      if (window.innerWidth < 1024) {
-        document.getElementById('sidebar').classList.add('hidden');
-        document.getElementById('sidebar').classList.remove('flex');
-      }
-    }
-
-    // Toggle para mostrar/esconder o menu lateral no celular e tablet
+    // Toggle da Sidebar no Mobile
     function toggleMobileSidebar() {
       const sidebar = document.getElementById('sidebar');
       if (sidebar.classList.contains('hidden')) {
@@ -498,173 +533,113 @@
       }
     }
 
-    // Modal de Nova / Editar Tarefa
-    function openModal(modalId) {
-      document.getElementById(`${modalId}Modal`).classList.remove('hidden');
-    }
+    // Navegação entre Abas
+    function switchTab(tab) {
+      const tasksTab = document.getElementById('tasksTab');
+      const calendarTab = document.getElementById('calendarTab');
+      const settingsTab = document.getElementById('settingsTab');
+      const backBtn = document.getElementById('mobileBackBtnContainer');
 
-    function closeModal(modalId) {
-      document.getElementById(`${modalId}Modal`).classList.add('hidden');
-    }
+      const navTasksBtn = document.getElementById('navTasksBtn');
+      const navCalendarBtn = document.getElementById('navCalendarBtn');
+      const navSettingsBtn = document.getElementById('navSettingsBtn');
 
-    // Adicionar nova tarefa
-    function handleAddTask(e) {
-      e.preventDefault();
-      const title = document.getElementById('taskTitle').value;
-      const description = document.getElementById('taskDescription').value;
-      const category = document.getElementById('taskCategory').value || 'Geral';
-      const date = document.getElementById('taskDate').value;
-      const status = document.getElementById('taskStatus').value;
-      const priorityRadio = document.querySelector('input[name="newPriority"]:checked');
-      const priority = priorityRadio ? priorityRadio.value : 'Média';
-      const completed = status === 'Concluída';
+      // Esconder todas as abas
+      tasksTab.classList.add('hidden');
+      calendarTab.classList.add('hidden');
+      settingsTab.classList.add('hidden');
 
-      const newTask = {
-        id: Date.now(),
-        title,
-        description,
-        category,
-        date,
-        status,
-        priority,
-        completed
-      };
+      // Reset dos estilos dos botões de navegação
+      const activeClasses = ['bg-green-50', 'text-green-700', 'dark:bg-green-950/50', 'dark:text-green-400', 'border', 'border-green-200', 'dark:border-green-800/50'];
+      const inactiveClasses = ['text-gray-600', 'dark:text-gray-400', 'hover:bg-gray-100', 'dark:hover:bg-gray-800'];
 
-      tasks.push(newTask);
-      document.getElementById('newTaskForm').reset();
-      closeModal('newTask');
-      renderTasks();
-    }
-
-    // Abrir modal e carregar dados para edição
-    function openEditModal(id) {
-      const task = tasks.find(t => t.id === id);
-      if (!task) return;
-
-      document.getElementById('editTaskId').value = task.id;
-      document.getElementById('editTaskTitle').value = task.title;
-      document.getElementById('editTaskDescription').value = task.description || '';
-      document.getElementById('editTaskCategory').value = task.category || '';
-      document.getElementById('editTaskDate').value = task.date;
-      document.getElementById('editTaskStatus').value = task.status || (task.completed ? 'Concluída' : 'Pendente');
-
-      const priorityRadios = document.querySelectorAll('input[name="editPriority"]');
-      priorityRadios.forEach(r => {
-        r.checked = (r.value === task.priority);
+      [navTasksBtn, navCalendarBtn, navSettingsBtn].forEach(btn => {
+        if(btn) {
+          btn.classList.remove(...activeClasses);
+          btn.classList.add(...inactiveClasses);
+        }
       });
 
-      openModal('editTask');
-    }
-
-    // Salvar edição da tarefa
-    function handleEditTask(e) {
-      e.preventDefault();
-      const id = Number(document.getElementById('editTaskId').value);
-      const task = tasks.find(t => t.id === id);
-
-      if (task) {
-        task.title = document.getElementById('editTaskTitle').value;
-        task.description = document.getElementById('editTaskDescription').value;
-        task.category = document.getElementById('editTaskCategory').value || 'Geral';
-        task.date = document.getElementById('editTaskDate').value;
-        task.status = document.getElementById('editTaskStatus').value;
-        const priorityRadio = document.querySelector('input[name="editPriority"]:checked');
-        task.priority = priorityRadio ? priorityRadio.value : 'Média';
-        task.completed = (task.status === 'Concluída');
+      // Exibir aba selecionada
+      if (tab === 'tasks') {
+        tasksTab.classList.remove('hidden');
+        if(navTasksBtn) {
+          navTasksBtn.classList.remove(...inactiveClasses);
+          navTasksBtn.classList.add(...activeClasses);
+        }
+        if(backBtn) backBtn.classList.add('hidden');
+      } else if (tab === 'calendar') {
+        calendarTab.classList.remove('hidden');
+        if(navCalendarBtn) {
+          navCalendarBtn.classList.remove(...inactiveClasses);
+          navCalendarBtn.classList.add(...activeClasses);
+        }
+        if(backBtn) backBtn.classList.remove('hidden');
+      } else if (tab === 'settings') {
+        settingsTab.classList.remove('hidden');
+        if(navSettingsBtn) {
+          navSettingsBtn.classList.remove(...inactiveClasses);
+          navSettingsBtn.classList.add(...activeClasses);
+        }
+        if(backBtn) backBtn.classList.remove('hidden');
       }
 
+      // Ocultar sidebar mobile após navegação se em tela pequena
+      if (window.innerWidth < 1024) {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.add('hidden');
+        sidebar.classList.remove('flex');
+      }
+    }
+
+    // Abertura de Modais
+    function openModal(modalType) {
+      if (modalType === 'newTask') {
+        document.getElementById('newTaskModal').classList.remove('hidden');
+      }
+    }
+
+    // Fechamento de Modais
+    function closeModal(modalType) {
+      if (modalType === 'newTask') {
+        document.getElementById('newTaskModal').classList.add('hidden');
+      } else if (modalType === 'editTask') {
+        document.getElementById('editTaskModal').classList.add('hidden');
+      } else if (modalType === 'delete') {
+        document.getElementById('deleteModal').classList.add('hidden');
+      }
+    }
+
+    // Abrir Modal de Edição
+    function openEditModal(taskId) {
+      document.getElementById('editTaskTitleInput').value = 'Tarefa ' + taskId;
+      document.getElementById('editTaskDescInput').value = 'Descrição da tarefa ' + taskId;
+      document.getElementById('editTaskCategoryInput').value = 'Estudos';
+      document.getElementById('editTaskDateInput').value = '2026-10-20';
+      document.getElementById('editTaskStatusInput').value = 'Pendente';
+      document.getElementById('editTaskModal').classList.remove('hidden');
+    }
+
+    // Manipulador de Adicionar Tarefa
+    function handleAddTask(event) {
+      event.preventDefault();
+      closeModal('newTask');
+    }
+
+    // Manipulador de Salvar Edição
+    function handleSaveEdit(event) {
+      event.preventDefault();
       closeModal('editTask');
-      renderTasks();
     }
 
-    // Excluir tarefa
-    function deleteTask(id) {
-      tasks = tasks.filter(t => t.id !== id);
-      renderTasks();
+    // Excluir Tarefa (Simulação Protótipo)
+    function deleteTask(taskId) {
+      document.getElementById('deleteModalText').innerText = 'Tarefa ' + taskId + ' excluída com sucesso';
+      document.getElementById('deleteModal').classList.remove('hidden');
     }
 
-    // Alternar status de concluída
-    function toggleTaskStatus(id) {
-      // Funcionalidade desativada conforme solicitado
-      return;
-    }
-
-    // Formatar data em dia/mês/ano
-    function formatDate(dateStr) {
-      if (!dateStr) return '';
-      const [year, month, day] = dateStr.split('-');
-      return `${day}/${month}/${year}`;
-    }
-
-    // Renderizar Tarefas e atualizar estatísticas
-    function renderTasks() {
-      const tasksGrid = document.getElementById('tasksGrid');
-      tasksGrid.innerHTML = '';
-
-      const completedCount = tasks.filter(t => t.completed).length;
-      const pendingCount = tasks.length - completedCount;
-
-      document.getElementById('totalTasksCount').innerText = tasks.length;
-      document.getElementById('completedTasksCount').innerText = completedCount;
-      document.getElementById('pendingTasksCount').innerText = pendingCount;
-
-      tasks.forEach(task => {
-        const priorityColors = {
-          'Alta': 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
-          'Média': 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
-          'Baixa': 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-        };
-
-        const card = document.createElement('div');
-        card.className = "bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-5 shadow-sm flex flex-col justify-between space-y-4";
-        
-        card.innerHTML = `
-          <div class="space-y-2">
-            <div class="flex items-start justify-between gap-3">
-              <label class="flex items-center gap-3 min-w-0 cursor-pointer">
-                <input type="checkbox" ${task.completed ? 'checked' : ''} class="w-5 h-5 rounded border-gray-300 text-green-600 accent-green-600 shrink-0 cursor-pointer">
-                <span class="font-bold text-lg ${task.completed ? 'text-gray-400 dark:text-gray-500 line-through' : 'text-gray-900 dark:text-white'} truncate">
-                  ${task.title}
-                </span>
-              </label>
-              <div class="flex items-center gap-1.5 shrink-0">
-                <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700">
-                  ${task.category || 'Geral'}
-                </span>
-                <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full ${priorityColors[task.priority] || priorityColors['Média']}">
-                  ${task.priority}
-                </span>
-              </div>
-            </div>
-            <p class="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
-              <span class="font-semibold text-gray-700 dark:text-gray-300">Descrição:</span> ${task.description || 'Sem descrição.'}
-            </p>
-            <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 pt-1">
-              <span><span class="font-medium text-gray-700 dark:text-gray-300">Data de entrega:</span> ${formatDate(task.date)}</span>
-              <span class="text-[11px] font-medium px-2 py-0.5 rounded ${task.completed ? 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300' : 'bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300'}">
-                ${task.status || (task.completed ? 'Concluída' : 'Pendente')}
-              </span>
-            </div>
-          </div>
-          <div class="flex items-center justify-end gap-2 pt-2 border-t border-gray-100 dark:border-gray-800">
-            <button onclick="openEditModal(${task.id})" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-green-50 dark:bg-green-950/60 text-green-700 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/80 transition-colors">
-              Editar
-            </button>
-            <button onclick="deleteTask(${task.id})" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-red-50 dark:bg-red-950/60 text-red-600 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-900/80 transition-colors">
-              Excluir
-            </button>
-          </div>
-        `;
-
-        tasksGrid.appendChild(card);
-      });
-    }
-
-    // Renderizar tarefas ao carregar a página
-    window.onload = function() {
-      renderTasks();
-    };
+    // Ativar o modo Dark por padrão
+    document.documentElement.classList.add('dark');
   </script>
-
 </body>
 </html>
